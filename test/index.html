@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+  <title>Calculator Test</title>
+</head>
+<body>
+<script src="../dist/calculator.min.js"></script>
+<script>
+  var calculator = new Calculator();
+  var arrs = [
+    {s: "1+2+3",r: 6},
+    {s: "---2+++3--4!",r: 25},
+    {s: "2* (2 + 3)", r: 10},
+    {s: "2 + 3! / 2", r:5},
+    {s: "min(2,3)", r: 2},
+    {s: "max(2,3,min(3,-2))!", r: 6},
+    {s: "3^3^2", r: 19683},
+    {s: "3√27", r: 3},
+    {s: "log(min(2,5),2^3)", r: 3},
+    {s: "2,3,4", r: 4},
+    {s: "test(4,5,6, 2)", r: -1},
+    {s: "ca(min(2 + 3, 8),10)", r: Math.PI * 5 * 5},
+    {s: "ta(3,4,5)", r: 6}
+  ]
+  calculator.definedOperators(
+    {
+        token: "test",
+        func: function(a, b, c, d) {
+          return a * (b - c) / (2 + d)
+        }
+    }
+  )
+  calculator.definedOperators([
+    {
+      // Area of a circle
+      token: "ca",
+      func: function(r) {
+        return Math.PI * r * r
+      }
+    },
+    {
+      // Area of a triangle
+      token: "ta",
+      func:function(a, b, c) {
+        var p =  (a + b + c) * 0.5
+        return Math.pow( p * (p - a) * (p - b) * ( p - c), 0.5)
+      }
+    }
+  ])
+  calculator.definedOperators(
+    {
+        token: "!",
+        type: "infix",
+        func: function(a, b, c, d) {
+          return a * (b - c) / (2 + d)
+        }
+    }
+  )
+for (let i = 0, len = arrs.length; i < len; i++) {
+  let item = arrs[i]
+  let result = calculator.parse(item.s)
+  if(result.value === item.r) {
+    console.log(`%c${item.s} = ${result.value} [success]`, "color: blue;")
+  } else {
+    console.log(`%c${item.s} should be ${item.r},but gives ${result.value}`,"color: red")
+  }
+}
+</script>
+</body>
+</html>

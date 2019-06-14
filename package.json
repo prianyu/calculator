@@ -1,0 +1,28 @@
+{
+  "name": "calculator",
+  "version": "1.0.0",
+  "description": "A util for parse mathematical expressions",
+  "main": "index.js",
+  "scripts": {
+    "minify": "gulp build",
+    "gulp": "gulp"
+  },
+  "keywords": [
+    "Javascript",
+    "calaculator",
+    "js calaculator"
+  ],
+  "author": "prianYu",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "gulp-babel": "^8.0.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-uglify": "^3.0.2"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.4.4"
+  }
+}
