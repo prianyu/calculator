@@ -48,7 +48,7 @@ So you can get the result by `result.value` and get the notation by `result.nota
 The util supports parsing mathematical operator(like `+,-,*,/`) and functions,Currently it supports by default the following mathematical operators:
 
 |Operator|Type  |Precedence |Description|
-|:-------|:----:|:----------|
+|:-------|:----:|------|:----------|
 |`+`      |prefix |3|positive sign|
 |`-`       |prefix|3|      |negative sign|
 |`+`       |infix|2     |addition   |
