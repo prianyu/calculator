@@ -21,7 +21,7 @@ class Calculator {
     this._definedOperator("tan", Math.tan)
     this._definedOperator("abs", Math.abs)
     this._definedOperator("log", this.log)
-    this._definedOperator("√", this.sqrt, "infix", 6)
+    this._definedOperator("√", this.sqrt, "infix", 4)
 
     this.calcReg()
     this._caches = {}
