@@ -1,3 +1,5 @@
+[English Doc](./README.md)
+
 # calculator
 一个数学表达式的解析工具
 
@@ -72,7 +74,7 @@ console.log(result);
 |`-`       |infix|2      |减法|
 |`*`       |infix|4      |乘法|
 |`/`      |infix|4      |除法|
-|`|`       |infix|4      |求余|
+|`\|`       |infix|4      |求余|
 |`%`       |postfix|6      |百分率|
 |`(`,`)`      |prefix,postfix |0     |括号|
 |`!`       |postfix|6      |阶乘|

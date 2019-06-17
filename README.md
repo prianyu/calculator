@@ -1,3 +1,5 @@
+[中文文档](./README_CN.md)
+
 # calculator
 A mathematical expression parser for Javascript.
 
@@ -71,7 +73,7 @@ The util supports parsing mathematical operator(like `+,-,*,/`) and functions,Cu
 |`-`       |infix|2      |subtraction|
 |`*`       |infix|4      |multiplication|
 |`/`      |infix|4      |division|
-|`|`       |infix|4      |Mod|
+|`\|`       |infix|4      |Mod|
 |`%`       |postfix|6      |percentage|
 |`(`,`)`      |prefix,postfix |0     |parentheses|
 |`!`       |postfix|6      |factorial|
