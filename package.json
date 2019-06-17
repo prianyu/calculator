@@ -2,10 +2,9 @@
   "name": "calculator",
   "version": "1.0.0",
   "description": "A util for parse mathematical expressions",
-  "main": "index.js",
+  "main": "dist/calaculator.js",
   "scripts": {
-    "minify": "gulp build",
-    "gulp": "gulp"
+    "build": "gulp build"
   },
   "keywords": [
     "Javascript",
@@ -13,16 +12,30 @@
     "js calaculator"
   ],
   "author": "prianYu",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
-    "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.5",
+    "@babel/plugin-external-helpers": "^7.2.0",
     "@babel/preset-env": "^7.4.5",
-    "gulp-babel": "^8.0.0",
+    "babel-plugin-external-helpers": "^6.22.0",
     "gulp-rename": "^1.4.0",
-    "gulp-uglify": "^3.0.2"
+    "gulp-uglify": "^3.0.2",
+    "rollup": "^1.15.6",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-node-resolve": "^5.0.3"
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.4"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prianyu/calculator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/prianyu/calculator/issues"
+  },
+  "homepage": "https://github.com/prianyu/calculator#readme"
 }

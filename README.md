@@ -1,5 +1,12 @@
 # calculator
-A mathematical expression parser for Javascript.You can use the util to parse a mathematical expression into an Reverse Polish Notation or evaluate it.For example,when you parse `1+2*3`，you will get the expression `+ * 3 2 1` and the result `7`.
+A mathematical expression parser for Javascript.
+
++ Works in Wechat miniProgram
++ Supports IE9+
++ Supports AMD/CommonJS
++ Supports custom operators
+
+You can use the util to parse a mathematical expression into an Reverse Polish Notation or evaluate it.For example,when you parse `1+2*3`，you will get the expression `+ * 3 2 1` and the result `7`.
 
 ## Installation
 
@@ -101,4 +108,33 @@ console.log("10 // 3 + 2 = ", calculator.parse('10 // 3 + 2').value); // 10 // 3
 |`rtol`   |Boolean   | No   |is it a right-combination operator?,default `undefined`|
 
 > **The same operator can be `infix` and `prefix` ,like the operator `+`,but `infix` and `postfix` should be mutually exclusive**
+
+
+## Errors
+
+When parse a invalid expression, you will get an error.In order to customize error handling, exceptions will not be thrown directly.Instead,you will get the result like:
+
+```javascript
+{
+  code: 1004,
+  message: "Opening parenthesis is more than closing parenthesis"
+}
+```
+and get a warning on console like:
+
+![](./images/error.png)
+
+Here are all the error types:
+
+| code | description|
+|:----:|--------|
+|1001|Contains undefined operators|
+|1002|Syntax error|
+|1003|Missing a opening parenthesis after a function|
+|1004|Opening parenthesis is more than closing parenthesis|
+|1005|Closing parenthesis is more than opening parenthesis|
+
+## Demos
+
+[Demos](./test/index.html)
 

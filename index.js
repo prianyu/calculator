@@ -225,3 +225,4 @@ class Calculator {
     return Math.pow(b, 1/a)
   }
 }
+export default Calculator
