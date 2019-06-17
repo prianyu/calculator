@@ -68,7 +68,7 @@ The util supports parsing mathematical operator(like `+,-,*,/`) and functions,Cu
 |Operator|Type  |Precedence |Description|
 |:-------|:----:|------|:----------|
 |`+`      |prefix |3|positive sign|
-|`-`       |prefix|3|      |negative sign|
+|`-`       |prefix|3| negative sign|
 |`+`       |infix|2     |addition   |
 |`-`       |infix|2      |subtraction|
 |`*`       |infix|4      |multiplication|

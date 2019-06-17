@@ -69,7 +69,7 @@ console.log(result);
 |Operator（运算符）|Type（类型）  |Precedence（优先级） |说明|
 |:-------|:----:|------|:----------|
 |`+`      |prefix |3|正号|
-|`-`       |prefix|3|      |负号|
+|`-`       |prefix|3|  负号|
 |`+`       |infix|2     |加法|
 |`-`       |infix|2      |减法|
 |`*`       |infix|4      |乘法|
