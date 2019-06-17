@@ -28,6 +28,15 @@ Download the script  here and include it:
 $ npm install @iboxer/calculator --save
 ```
 
+#### AMD
+
+```javascript
+require(['./dist/calculator.js'], function(Calculator) {
+  var calculator = new Calculator()
+  calculator.parse("1+2+3")
+})
+```
+
 ## Basic Usage
 
 **Instance**
@@ -76,7 +85,7 @@ The util supports parsing mathematical operator(like `+,-,*,/`) and functions,Cu
 
 **API**
 
-You can also define custom operators and functions by using the API `definedOperators`.For example, you may define an operator `//` to get the quotient and an function `ca` to get the area of a circle：
+You can also define custom operators and functions by using the API `definedOperators(Object|Array)`.For example, you may define an operator `//` to get the quotient and an function `ca` to get the area of a circle：
 
 ```javascript
 calculator.definedOperators({
@@ -108,6 +117,7 @@ console.log("10 // 3 + 2 = ", calculator.parse('10 // 3 + 2').value); // 10 // 3
 |`rtol`   |Boolean   | No   |is it a right-combination operator?,default `undefined`|
 
 > **The same operator can be `infix` and `prefix` ,like the operator `+`,but `infix` and `postfix` should be mutually exclusive**
+> **The API can pass in an object or an array of objects to define a set of operators at the same time**
 
 
 ## Errors
