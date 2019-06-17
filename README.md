@@ -14,7 +14,7 @@ You can use the util to parse a mathematical expression into an Reverse Polish N
 
 ### Direct download
 
-Download the script  here and include it:
+Download the script  [here](https://github.com/prianyu/calculator/archive/master.zip) and include it:
 
 ```html
 <script src="/dist/calculator.min.js"></script>

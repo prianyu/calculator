@@ -1,7 +1,7 @@
 [English Doc](./README.md)
 
 # calculator
-一个数学表达式的解析工具
+一个数学表达式的解析工具。
 
 + 可以运行在微信小程序
 + 支持IE9+
@@ -14,7 +14,7 @@
 
 ### 下载脚本
 
-点击这里并引用对应的脚本文件:
+[点击这里下载](https://github.com/prianyu/calculator/archive/master.zip)并引用对应的脚本文件:
 
 ```html
 <script src="/dist/calculator.min.js"></script>
