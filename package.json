@@ -1,6 +1,6 @@
 {
   "name": "@shyjs/calculator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A util for parse mathematical expressions",
   "main": "dist/calaculator.js",
   "scripts": {
