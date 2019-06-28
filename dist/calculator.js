@@ -109,7 +109,7 @@
 
       this._definedOperator("log", this.log);
 
-      this._definedOperator("√", this.sqrt, "infix", 4);
+      this._definedOperator("//", this.sqrt, "infix", 4);
 
       this.calcReg();
       this._caches = {};

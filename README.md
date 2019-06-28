@@ -78,7 +78,7 @@ The util supports parsing mathematical operator(like `+,-,*,/`) and functions,Cu
 |`(`,`)`      |prefix,postfix |0     |parentheses|
 |`!`       |postfix|6      |factorial|
 |`^`       |infix|4      |exponentiation|
-|`√`       |infix|4      |radical expression|
+|`//`       |infix|4      |radical expression|
 |`log`     |func |0     |logarithm|
 |`abs`     |func |0     |get absolute value|
 |`sin`,`tan`,`cos`|func|0    |trigonometric function|

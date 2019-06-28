@@ -79,7 +79,7 @@ console.log(result);
 |`(`,`)`      |prefix,postfix |0     |括号|
 |`!`       |postfix|6      |阶乘|
 |`^`       |infix|4      |指数运算|
-|`√`       |infix|4      |开N次方|
+|`//`       |infix|4      |开N次方|
 |`log`     |func |0     |对数运算|
 |`abs`     |func |0     |求绝对值|
 |`sin`,`tan`,`cos`|func|0    |三角函数|
