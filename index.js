@@ -1,5 +1,5 @@
 class Calculator {
-  constructor() {
+  constructor(options = {}) {
     this._symbols = {};
     this._definedOperator("+", this.last, "prefix", 3)
     this._definedOperator("-", this.negation, "prefix", 3)
@@ -11,7 +11,7 @@ class Calculator {
     this._definedOperator(")", null, "postfix")
     this._definedOperator("|", this.mod, 'infix', 4)
     this._definedOperator("!", this.fac, 'postfix', 6)
-    this._definedOperator("^",  Math.pow, 'infix', 4, true)
+    this._definedOperator("^",  Math.pow, 'infix', 5, true)
     this._definedOperator("min", Math.min)
     this._definedOperator("max", Math.max)
     this._definedOperator(",", Array.of, 'infix', 1)
@@ -23,7 +23,8 @@ class Calculator {
     this._definedOperator("log", this.log)
     this._definedOperator("//", this.sqrt, "infix", 4)
 
-    this.calcReg()
+    this.definedOperators(options.operators || [])
+    this.handleError = typeof options.handleError === 'function' ? options.handleError : null
     this._caches = {}
   }
 
@@ -54,7 +55,7 @@ class Calculator {
     let argCount = type === 'infix' ? 2 : 1
     // Some symbols may have different handle like '-' and '+'
     this._symbols[symbol] =  Object.assign({}, this._symbols[symbol], {
-      [type]:{symbol, handle, precedence, argCount, type, right2left},
+      [type]:{symbol, handle: handle ? handle.bind(this) :handle, precedence, argCount, type, right2left},
       symbol
     })
   }
@@ -62,7 +63,7 @@ class Calculator {
   definedOperators(operators) {
     operators = Array.isArray(operators) ? operators : [operators]
     operators.map(v => {
-      if(["(", ")", ","].indexOf(v.token) === -1) {
+      if(["(", ")", ","].indexOf(v.token) === -1 && v.token && v.func) {
         let operator = this._symbols[v.token]
         if(operator && (operator.infix && v.type === "postfix" ||operator.postfix && v.type === 'infix')) {
           console.warn(`${v.token}: infix and postfix operator should be mutually exclusive`)
@@ -80,8 +81,7 @@ class Calculator {
       result.push(symbol.handle(...[].concat(...result.splice(-symbol.argCount))))
       return symbol.precedence
     }
-
-    let error = (code, msg) => {
+    let error = this.handleError || ((code, msg) => {
       let pos  = match ? match.index : s.length,
           str = `[error code:${code}] ${msg} at ${pos}:\n${s}\n${' '.repeat(pos)}^`
           console.warn(`${str}`)
@@ -91,7 +91,7 @@ class Calculator {
       }
       this._caches[s].err = err
       return err
-    }
+    })
 
     let operators = [this._symbols["("].prefix],
         result = [],
@@ -191,14 +191,18 @@ class Calculator {
   }
 
   div(a,b) {
-    if(b === 0)
-      throw new Error("The divisor cannot be zero")
+    if(b === 0){
+      this.handleError && this.handleError({code: 1006, message:"The divisor cannot be zero"})
+      return Infinity
+    }
     return a / b
   }
 
   mod(a,b) {
-    if(b === 0)
-      throw new Error("The divisor cannot be zero")
+    if(b === 0) {
+      this.handleError && this.handleError({code: 1006, message:"The divisor cannot be zero"})
+      return Infinity
+    }
     return a % b
   }
 
@@ -212,7 +216,8 @@ class Calculator {
 
   log(a,b) {
     if(a <= 0 || a == 1) {
-      throw new Error("The base number of logarithmic operations must be greater than 0 and not equal to 1")
+      this.handleError && this.handleError({code: 1007, message: "The base number of logarithmic operations must be greater than 0 and not equal to 1"})
+      return NaN
     }
     return Math.log(b) / Math.log(a)
   }

@@ -65,6 +65,8 @@
   /*#__PURE__*/
   function () {
     function Calculator() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
       _classCallCheck(this, Calculator);
 
       this._symbols = {};
@@ -89,7 +91,7 @@
 
       this._definedOperator("!", this.fac, 'postfix', 6);
 
-      this._definedOperator("^", Math.pow, 'infix', 4, true);
+      this._definedOperator("^", Math.pow, 'infix', 5, true);
 
       this._definedOperator("min", Math.min);
 
@@ -111,7 +113,8 @@
 
       this._definedOperator("//", this.sqrt, "infix", 4);
 
-      this.calcReg();
+      this.definedOperators(options.operators || []);
+      this.handleError = typeof options.handleError === 'function' ? options.handleError : null;
       this._caches = {};
     } //generate a regular expression
 
@@ -150,7 +153,7 @@
 
         this._symbols[symbol] = Object.assign({}, this._symbols[symbol], (_Object$assign = {}, _defineProperty(_Object$assign, type, {
           symbol: symbol,
-          handle: handle,
+          handle: handle ? handle.bind(this) : handle,
           precedence: precedence,
           argCount: argCount,
           type: type,
@@ -165,7 +168,7 @@
 
         operators = Array.isArray(operators) ? operators : [operators];
         operators.map(function (v) {
-          if (["(", ")", ","].indexOf(v.token) === -1) {
+          if (["(", ")", ","].indexOf(v.token) === -1 && v.token && v.func) {
             var operator = _this._symbols[v.token];
 
             if (operator && (operator.infix && v.type === "postfix" || operator.postfix && v.type === 'infix')) {
@@ -190,7 +193,7 @@
           return symbol.precedence;
         };
 
-        var error = function error(code, msg) {
+        var error = this.handleError || function (code, msg) {
           var pos = match ? match.index : s.length,
               str = "[error code:".concat(code, "] ").concat(msg, " at ").concat(pos, ":\n").concat(s, "\n").concat(' '.repeat(pos), "^");
           console.warn("".concat(str));
@@ -317,13 +320,27 @@
     }, {
       key: "div",
       value: function div(a, b) {
-        if (b === 0) throw new Error("The divisor cannot be zero");
+        if (b === 0) {
+          this.handleError && this.handleError({
+            code: 1006,
+            message: "The divisor cannot be zero"
+          });
+          return Infinity;
+        }
+
         return a / b;
       }
     }, {
       key: "mod",
       value: function mod(a, b) {
-        if (b === 0) throw new Error("The divisor cannot be zero");
+        if (b === 0) {
+          this.handleError && this.handleError({
+            code: 1006,
+            message: "The divisor cannot be zero"
+          });
+          return Infinity;
+        }
+
         return a % b;
       }
     }, {
@@ -343,7 +360,11 @@
       key: "log",
       value: function log(a, b) {
         if (a <= 0 || a == 1) {
-          throw new Error("The base number of logarithmic operations must be greater than 0 and not equal to 1");
+          this.handleError && this.handleError({
+            code: 1007,
+            message: "The base number of logarithmic operations must be greater than 0 and not equal to 1"
+          });
+          return NaN;
         }
 
         return Math.log(b) / Math.log(a);
