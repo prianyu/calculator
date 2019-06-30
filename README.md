@@ -49,7 +49,7 @@ require(['./dist/calculator.js'], function(Calculator) {
 var calculator = new Calculator();
 
 ```
-> options
+**options**
 
   > **handleError:** Error handler.For more details, please click here[click here](https://github.com/prianyu/calculator/blob/master/README_CN.md#Errors) 
 

@@ -50,7 +50,7 @@ require(['./dist/calculator.js'], function(Calculator) {
 var calculator = new Calculator();
 
 ```
-> options
+**options**
 
   > **handleError:** 错误处理函数，详情请见[这里](https://github.com/prianyu/calculator/blob/master/README_CN.md#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86) 
 
