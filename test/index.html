@@ -7,7 +7,14 @@
 <body>
 <script src="../dist/calculator.min.js"></script>
 <script>
-  var calculator = new Calculator();
+  var calculator = new Calculator({
+    handleError: function(err) {
+      if(err.code === 1006)
+        return {
+          value: Infinity
+        }
+    }
+  });
   var arrs = [
     {s: "1+2+3",r: 6},
     {s: "---2+++3--4!",r: 25},
@@ -22,7 +29,8 @@
     {s: "2,3,4", r: 4},
     {s: "test(4,5,6, 2)", r: -1},
     {s: "ca(min(2 + 3, 8),10)", r: Math.PI * 5 * 5},
-    {s: "ta(3,4,5)", r: 6}
+    {s: "ta(3,4,5)", r: 6},
+    {s: "1/(5-5)", r: Infinity}
   ]
   calculator.definedOperators(
     {

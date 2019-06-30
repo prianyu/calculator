@@ -42,14 +42,19 @@ require(['./dist/calculator.js'], function(Calculator) {
 
 ## 用法
 
-**实例化**
+###实例化
+
+> new Calculator(options)
 
 ```javascript
 var calculator = new Calculator();
 
 ```
+> options
+ > **handleError:** 错误处理函数，详情请见[这里](https://github.com/prianyu/calculator/blob/master/README_CN.md#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86) 
+ > **operators:** 自定义的运算符，详情请见[这里](https://github.com/prianyu/calculator/blob/master/README_CN.md#API)
 
-**解析**
+###解析
 
 ```javascript
 var result = calculator.parse("1+2*3");
@@ -85,14 +90,16 @@ console.log(result);
 |`sin`,`tan`,`cos`|func|0    |三角函数|
 |`,`          |infix|1     |函数参数分隔符|
 
+****
 
-**API**
 
-你可以利用`definedOperators(Object|Array)`这个API自定义一组数学运算符和函数。例如，你要定义一个求商的运算符`//`和一个求圆的面积的函数`ca`，那么你可以这么做：
+###API
+
+你可以利用`definedOperators(Object|Array)`这个API自定义一组数学运算符和函数。例如，你要定义一个求商的运算符`||`和一个求圆的面积的函数`ca`，那么你可以这么做：
 
 ```javascript
 calculator.definedOperators({
-  token: "//",
+  token: "||",
   type: "infix",
   func: function(a, b) {
     return Math.floor(a / b);
@@ -108,7 +115,7 @@ calculator.definedOperators({
 });
 
 console.log("ca(5) = ", calculator.parse('ca(5)').value); // ca(5) =  78.53981633974483
-console.log("10 // 3 + 2 = ", calculator.parse('10 // 3 + 2').value); // 10 // 3 + 2 = 5
+console.log("10 s 3 + 2 = ", calculator.parse('10 || 3 + 2').value); // 10 || 3 + 2 = 5
 ```
 
 |参数 |  类型  | 是否必须 | 说明 |
@@ -123,19 +130,42 @@ console.log("10 // 3 + 2 = ", calculator.parse('10 // 3 + 2').value); // 10 // 3
 > **`definedOperators`可以传入对象，也可以传入对象的数组来同时定义一组运算符**
 
 
-## 错误处理
+##错误处理
 
 当解析一个不合法的表达式时，将会得到一个错误，但为了可以自定义错误的处理方式，因此不会直接跑出异常，而是返回了一个包含错误码和错误信息的对象：
 
 ```javascript
 {
   code: 1004,
-  message: "Opening parenthesis is more than closing parenthesis"
+  message: "Opening parenthesis is more than closing parenthesis",
+  pos: 20,
+  token: "/"
 }
 ```
+| 键名 | 说明|
+|:----:|--------|
+|code|错误码|
+|message|错误摘要|
+|pos|错误在式子中的位置|
+|token|当前发生错误解析的符号|
+
 同时在控制台里会打印出一个包含具体错误位置的警告信息，如下:
 
 ![](./images/error.png)
+
+默认情况下，解析后会将整个错误对象作为结果返回，你可以自定义错误处理。方法是实例化时传递一个自定义的错误处理函数`handleError`：
+
+```javascript
+var calculator = new Calculator({
+  handleError: function(err) {
+    if(err.code === 1006)
+      return {
+        value: Infinity
+      }
+  }
+});
+
+```
 
 目前支持的错误类型有以下几个：
 
@@ -146,6 +176,9 @@ console.log("10 // 3 + 2 = ", calculator.parse('10 // 3 + 2').value); // 10 // 3
 |1003|函数后面缺少左括号|
 |1004|左括号数量比右括号多|
 |1005|右括号数量比左括号多|
+|1006|除数不能为0|
+|1007|对数运算底数必须为大于0不等于1的数|
+|1008|普通阶乘运算的底数必须为非负整数|
 
 ## Demos
 

@@ -4,6 +4,20 @@
   (global = global || self, global.Calculator = factory());
 }(this, function () { 'use strict';
 
+  function _typeof(obj) {
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof = function (obj) {
+        return typeof obj;
+      };
+    } else {
+      _typeof = function (obj) {
+        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+      };
+    }
+
+    return _typeof(obj);
+  }
+
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
@@ -188,21 +202,32 @@
         var calc = function calc(symbol) {
           var _ref;
 
+          var r;
           symbol.symbol != "(" && notation.push(symbol);
-          result.push(symbol.handle.apply(symbol, _toConsumableArray((_ref = []).concat.apply(_ref, _toConsumableArray(result.splice(-symbol.argCount))))));
-          return symbol.precedence;
+          r = symbol.handle.apply(symbol, _toConsumableArray((_ref = []).concat.apply(_ref, _toConsumableArray(result.splice(-symbol.argCount)))));
+
+          if (r.code) {
+            // some error
+            return r;
+          } else {
+            result.push(r);
+            return symbol.precedence;
+          }
         };
 
-        var error = this.handleError || function (code, msg) {
+        var error = function error(code, message) {
           var pos = match ? match.index : s.length,
-              str = "[error code:".concat(code, "] ").concat(msg, " at ").concat(pos, ":\n").concat(s, "\n").concat(' '.repeat(pos), "^");
+              str = "[error code:".concat(code, "] ").concat(message, " at ").concat(pos, ":\n").concat(s, "\n").concat(' '.repeat(pos), "^");
           console.warn("".concat(str));
           var err = {
             code: code,
-            message: msg
+            message: message,
+            pos: pos,
+            token: token
           };
-          _this2._caches[s].err = err;
-          return err;
+          var result = _this2.handleError ? _this2.handleError(err) : err;
+          _this2._caches[s] = result;
+          return result;
         };
 
         var operators = [this._symbols["("].prefix],
@@ -218,11 +243,7 @@
         var cache = this._caches[s];
 
         if (cache) {
-          if (cache.err) {
-            return error(cache.err.code, cache.err.message);
-          } else {
-            return cache;
-          }
+          return cache;
         }
 
         this._caches[s] = {};
@@ -245,12 +266,19 @@
           if (lastIsNumber) {
             //The current operator should be an infix or postfix operator
             var currSymbol = curr.postfix || curr.infix;
+            var calcResult = void 0;
 
             do {
               //comparing operator precedence
               var prev = operators[operators.length - 1];
               if ((currSymbol.precedence - prev.precedence || prev.right2left) > 0) break;
-            } while (calc(operators.pop())); // Exit the loop after executing an opening parenthesis or function
+              calcResult = calc(operators.pop());
+
+              if (_typeof(calcResult) === 'object') {
+                //Invalid calculation
+                return error(calcResult.code, calcResult.message);
+              }
+            } while (calcResult); // Exit the loop after executing an opening parenthesis or function
 
 
             if (currSymbol.symbol != ")") {
@@ -320,33 +348,26 @@
     }, {
       key: "div",
       value: function div(a, b) {
-        if (b === 0) {
-          this.handleError && this.handleError({
-            code: 1006,
-            message: "The divisor cannot be zero"
-          });
-          return Infinity;
-        }
-
-        return a / b;
+        return b === 0 ? {
+          code: 1006,
+          message: "The divisor cannot be zero"
+        } : a / b;
       }
     }, {
       key: "mod",
       value: function mod(a, b) {
-        if (b === 0) {
-          this.handleError && this.handleError({
-            code: 1006,
-            message: "The divisor cannot be zero"
-          });
-          return Infinity;
-        }
-
-        return a % b;
+        return b === 0 ? {
+          code: 1006,
+          message: "The divisor cannot be zero"
+        } : a % b;
       }
     }, {
       key: "fac",
       value: function fac(a) {
-        if (a % 1 || !(+a >= 0)) return NaN;
+        if (a % 1 || !(+a >= 0)) return {
+          code: 1008,
+          message: "The factorial base must be a non-negative integer"
+        };
         if (a > 170) return Infinity;
         var b = 1;
 
@@ -359,14 +380,10 @@
     }, {
       key: "log",
       value: function log(a, b) {
-        if (a <= 0 || a == 1) {
-          this.handleError && this.handleError({
-            code: 1007,
-            message: "The base number of logarithmic operations must be greater than 0 and not equal to 1"
-          });
-          return NaN;
-        }
-
+        if (a <= 0 || a == 1) return {
+          code: 1007,
+          message: "The base number of logarithmic operations must be greater than 0 and not equal to 1"
+        };
         return Math.log(b) / Math.log(a);
       }
     }, {

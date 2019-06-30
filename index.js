@@ -77,21 +77,27 @@ class Calculator {
 
   parse(s) {
     let calc = symbol => {
+      let r
       symbol.symbol != "(" && notation.push(symbol)
-      result.push(symbol.handle(...[].concat(...result.splice(-symbol.argCount))))
-      return symbol.precedence
+      r = symbol.handle(...[].concat(...result.splice(-symbol.argCount)))
+      if(r.code) {// some error
+        return r
+      } else {
+        result.push(r)
+        return symbol.precedence
+      } 
     }
-    let error = this.handleError || ((code, msg) => {
+    let error = (code, message) => {
       let pos  = match ? match.index : s.length,
-          str = `[error code:${code}] ${msg} at ${pos}:\n${s}\n${' '.repeat(pos)}^`
+          str = `[error code:${code}] ${message} at ${pos}:\n${s}\n${' '.repeat(pos)}^`
           console.warn(`${str}`)
       let err = {
-        code: code,
-        message: msg
+        code, message, pos, token
       }
-      this._caches[s].err = err
-      return err
-    })
+      let result = this.handleError ? this.handleError(err) : err
+      this._caches[s] = result
+      return result
+    }
 
     let operators = [this._symbols["("].prefix],
         result = [],
@@ -104,11 +110,7 @@ class Calculator {
     s = s.replace(/\s/g,'')
     let cache  = this._caches[s]
     if(cache) {
-      if(cache.err) {
-        return error(cache.err.code, cache.err.message)
-      } else {
-        return cache;
-      }
+      return cache
     }
     this._caches[s] = {}
     this.pattern.lastIndex = 0
@@ -131,12 +133,16 @@ class Calculator {
       if(lastIsNumber) {
         //The current operator should be an infix or postfix operator
         const currSymbol = curr.postfix || curr.infix
+        let calcResult
         do {
           //comparing operator precedence
           let prev =  operators[operators.length - 1]
           if(((currSymbol.precedence - prev.precedence) || prev.right2left) > 0) break
-
-        } while(calc(operators.pop())) // Exit the loop after executing an opening parenthesis or function
+          calcResult = calc(operators.pop())
+          if(typeof calcResult === 'object') {//Invalid calculation
+            return error(calcResult.code, calcResult.message)
+          }
+        } while(calcResult) // Exit the loop after executing an opening parenthesis or function
 
         if(currSymbol.symbol != ")") {
           if(currSymbol.type === "postfix") {
@@ -191,23 +197,15 @@ class Calculator {
   }
 
   div(a,b) {
-    if(b === 0){
-      this.handleError && this.handleError({code: 1006, message:"The divisor cannot be zero"})
-      return Infinity
-    }
-    return a / b
+    return b === 0 ? {code: 1006, message:"The divisor cannot be zero"} : a / b
   }
 
-  mod(a,b) {
-    if(b === 0) {
-      this.handleError && this.handleError({code: 1006, message:"The divisor cannot be zero"})
-      return Infinity
-    }
-    return a % b
+  mod(a,b) { 
+    return b === 0 ? {code: 1006, message:"The divisor cannot be zero"} : a % b
   }
 
   fac(a) {
-    if(a % 1 || !(+a >=0)) return NaN
+    if(a % 1 || !(+a >=0)) return {code: 1008, message: "The factorial base must be a non-negative integer"}
     if(a > 170) return Infinity
     let b = 1
     while( a > 1) b *= a--
@@ -215,10 +213,7 @@ class Calculator {
   }
 
   log(a,b) {
-    if(a <= 0 || a == 1) {
-      this.handleError && this.handleError({code: 1007, message: "The base number of logarithmic operations must be greater than 0 and not equal to 1"})
-      return NaN
-    }
+    if(a <= 0 || a == 1) return {code: 1007, message: "The base number of logarithmic operations must be greater than 0 and not equal to 1"}
     return Math.log(b) / Math.log(a)
   }
 

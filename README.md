@@ -41,14 +41,19 @@ require(['./dist/calculator.js'], function(Calculator) {
 
 ## Basic Usage
 
-**Instance**
+###Instance
+
+> new Calculator(options)
 
 ```javascript
 var calculator = new Calculator();
 
 ```
+> options
+ > **handleError:** Error handler.For more details, please click here[click here](https://github.com/prianyu/calculator/blob/master/README_CN.md#Errors) 
+ > **operators:** Custom operators.For more details, please click here[click here](https://github.com/prianyu/calculator/blob/master/README_CN.md#API)
 
-**Parse**
+###Parse
 
 ```javascript
 var result = calculator.parse("1+2*3");
@@ -85,13 +90,13 @@ The util supports parsing mathematical operator(like `+,-,*,/`) and functions,Cu
 |`,`          |infix|1     |parameter separator of a function|
 
 
-**API**
+###API
 
-You can also define custom operators and functions by using the API `definedOperators(Object|Array)`.For example, you may define an operator `//` to get the quotient and an function `ca` to get the area of a circle：
+You can also define custom operators and functions by using the API `definedOperators(Object|Array)`.For example, you may define an operator `||` to get the quotient and an function `ca` to get the area of a circle：
 
 ```javascript
 calculator.definedOperators({
-  token: "//",
+  token: "||",
   type: "infix",
   func: function(a, b) {
     return Math.floor(a / b);
@@ -107,7 +112,7 @@ calculator.definedOperators({
 });
 
 console.log("ca(5) = ", calculator.parse('ca(5)').value); // ca(5) =  78.53981633974483
-console.log("10 // 3 + 2 = ", calculator.parse('10 // 3 + 2').value); // 10 // 3 + 2 = 5
+console.log("10 || 3 + 2 = ", calculator.parse('10 || 3 + 2').value); // 10 || 3 + 2 = 5
 ```
 
 |Param |  Type  | Required | Description |
@@ -122,19 +127,40 @@ console.log("10 // 3 + 2 = ", calculator.parse('10 // 3 + 2').value); // 10 // 3
 > **The API can pass in an object or an array of objects to define a set of operators at the same time**
 
 
-## Errors
+##Errors
 
 When parse a invalid expression, you will get an error.In order to customize error handling, exceptions will not be thrown directly.Instead,you will get the result like:
 
 ```javascript
 {
   code: 1004,
-  message: "Opening parenthesis is more than closing parenthesis"
+  message: "Opening parenthesis is more than closing parenthesis",
+  pos: 20,
+  token: "/"
 }
+```
+| key | description|
+|:----:|--------|
+|code|error code|
+|message|description|
+|pos|the error position in the expression|
+|token|current operator|
 ```
 and get a warning on console like:
 
 ![](./images/error.png)
+
+By default, the error object is returned as a result, and you can define a custom error-handler by passing  `handleError` for the instance:
+
+```javascript
+var calculator = new Calculator({
+  handleError: function(err) {
+    if(err.code === 1006)
+      return {
+        value: Infinity
+      }
+  }
+});
 
 Here are all the error types:
 
@@ -145,6 +171,10 @@ Here are all the error types:
 |1003|Missing a opening parenthesis after a function|
 |1004|Opening parenthesis is more than closing parenthesis|
 |1005|Closing parenthesis is more than opening parenthesis|
+|1006|The divisor cannot be zero|
+|1007|The base number of logarithmic operations must be greater than 0 and not equal to 1|
+|1008|The factorial base must be a non-negative integer|
+
 
 ## Demos
 
