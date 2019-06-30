@@ -41,7 +41,7 @@ require(['./dist/calculator.js'], function(Calculator) {
 
 ## Basic Usage
 
-###Instance
+### Instance
 
 > new Calculator(options)
 
@@ -53,7 +53,7 @@ var calculator = new Calculator();
  > **handleError:** Error handler.For more details, please click here[click here](https://github.com/prianyu/calculator/blob/master/README_CN.md#Errors) 
  > **operators:** Custom operators.For more details, please click here[click here](https://github.com/prianyu/calculator/blob/master/README_CN.md#API)
 
-###Parse
+### Parse
 
 ```javascript
 var result = calculator.parse("1+2*3");
@@ -90,7 +90,7 @@ The util supports parsing mathematical operator(like `+,-,*,/`) and functions,Cu
 |`,`          |infix|1     |parameter separator of a function|
 
 
-###API
+### API
 
 You can also define custom operators and functions by using the API `definedOperators(Object|Array)`.For example, you may define an operator `||` to get the quotient and an function `ca` to get the area of a circle：
 
@@ -127,7 +127,7 @@ console.log("10 || 3 + 2 = ", calculator.parse('10 || 3 + 2').value); // 10 || 3
 > **The API can pass in an object or an array of objects to define a set of operators at the same time**
 
 
-##Errors
+## Errors
 
 When parse a invalid expression, you will get an error.In order to customize error handling, exceptions will not be thrown directly.Instead,you will get the result like:
 

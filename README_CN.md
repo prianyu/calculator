@@ -42,7 +42,7 @@ require(['./dist/calculator.js'], function(Calculator) {
 
 ## 用法
 
-###实例化
+### 实例化
 
 > new Calculator(options)
 
@@ -54,7 +54,7 @@ var calculator = new Calculator();
  > **handleError:** 错误处理函数，详情请见[这里](https://github.com/prianyu/calculator/blob/master/README_CN.md#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86) 
  > **operators:** 自定义的运算符，详情请见[这里](https://github.com/prianyu/calculator/blob/master/README_CN.md#API)
 
-###解析
+### 解析
 
 ```javascript
 var result = calculator.parse("1+2*3");
@@ -93,7 +93,7 @@ console.log(result);
 ****
 
 
-###API
+### API
 
 你可以利用`definedOperators(Object|Array)`这个API自定义一组数学运算符和函数。例如，你要定义一个求商的运算符`||`和一个求圆的面积的函数`ca`，那么你可以这么做：
 
@@ -130,7 +130,7 @@ console.log("10 s 3 + 2 = ", calculator.parse('10 || 3 + 2').value); // 10 || 3 
 > **`definedOperators`可以传入对象，也可以传入对象的数组来同时定义一组运算符**
 
 
-##错误处理
+## 错误处理
 
 当解析一个不合法的表达式时，将会得到一个错误，但为了可以自定义错误的处理方式，因此不会直接跑出异常，而是返回了一个包含错误码和错误信息的对象：
 
