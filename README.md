@@ -7,6 +7,7 @@ A mathematical expression parser for Javascript.
 + Supports IE9+
 + Supports AMD/CommonJS
 + Supports custom operators
++ Supports custom functions
 
 You can use the util to parse a mathematical expression into an Reverse Polish Notation or evaluate it.For example,when you parse `1+2*3`，you will get the expression `+ * 3 2 1` and the result `7`.
 
@@ -51,9 +52,21 @@ var calculator = new Calculator();
 ```
 **options**
 
-  > **handleError:** Error handler.For more details, please click here[click here](https://github.com/prianyu/calculator/blob/master/README_CN.md#Errors) 
+  > **handleError[Function]:** Error handler.For more details, please click here[click here](https://github.com/prianyu/calculator/blob/master/README_CN.md#Errors) 
+  > **operators[Array<Object>|Object]:** Custom operators.For more details, please click here[click here](https://github.com/prianyu/calculator/blob/master/README_CN.md#API)
+  > **precision[Boolean]:** Whether to deal with floating point number precision, default `true`
 
-  > **operators:** Custom operators.For more details, please click here[click here](https://github.com/prianyu/calculator/blob/master/README_CN.md#API)
+```javascript
+var c1 = new Calculator({
+  precision: false
+})
+c1.parse("0.1+0.2").value //0.30000000000000004
+c1.parse("1.2/6").value //0.19999999999999998
+
+var c2 = new Calculator()
+c2.parse("0.1+0.2").value //0.3
+c2.parse("1.2/6").value //0.2
+```
 
 ### Parse
 
@@ -127,6 +140,19 @@ console.log("10 || 3 + 2 = ", calculator.parse('10 || 3 + 2').value); // 10 || 3
 
 > **The same operator can be `infix` and `prefix` ,like the operator `+`,but `infix` and `postfix` should be mutually exclusive**
 > **The API can pass in an object or an array of objects to define a set of operators at the same time**
+> **You can overload the behavior of all operators, except`(`, `)`and`,`.** For example, You may want trigonometric functions to support both radian and angle：
+
+```javascript
+var isAngle = false
+calculator.definedOperators({
+  token: "sin",
+  func: function(a) {
+    a = isAngle ? calculator._rectify(a, calculator._rectify(Math.PI, 180, "/"), "*") : a
+    return Math.sin(a)
+  }
+});
+```
+> `_rectify` is a private method, which is used to deal with floating point number precision. If necessary, you can use it: `_rectify (a, b, operator)`
 
 
 ## Errors

@@ -25,6 +25,7 @@ class Calculator {
 
     this.definedOperators(options.operators || [])
     this.handleError = typeof options.handleError === 'function' ? options.handleError : null
+    this.precision = options.precision === false ? false : true
     this._caches = {}
   }
 
@@ -175,29 +176,52 @@ class Calculator {
   }
 
   //handlers
-
+  _rectify(a, b, o) {
+    let m, n, c
+    a = a.toString()
+    b = b.toString()
+    m = (a.split(".")[1] || '').length
+    n = (b.split(".")[1] || '').length
+    switch(o) {
+      case "+":
+        c = Math.pow(10, Math.max(m, n))
+        return (a * c + b * c) / c
+      case "-":
+        c = Math.pow(10, Math.max(m, n))
+        return (a * c - b * c) / c
+      case "*":
+        a = a * Math.pow(10, m)
+        b = b * Math.pow(10, n)
+        return a * b / Math.pow(10, m + n)
+      case "/":
+        a = a * Math.pow(10, m)
+        b = b * Math.pow(10, n)
+        return a / b * Math.pow(10, n - m)
+    }
+    
+  }
   last(...a) {
     return a.pop()
   }
 
   negation(a) {
-     return -a
+    return -a
   }
 
   add(a,b) {
-    return a + b
+    return this.precision ? this._rectify(a, b, "+") : a + b
   }
 
   sub(a,b) {
-    return a - b
+    return this.precision ? this._rectify(a, b, "-") : a - b
   }
 
   multi(a,b) {
-    return a * b
+    return this.precision ? this._rectify(a, b, "*") : a * b
   }
 
   div(a,b) {
-    return b === 0 ? {code: 1006, message:"The divisor cannot be zero"} : a / b
+    return b === 0 ? {code: 1006, message:"The divisor cannot be zero"} : this.precision ? this._rectify(a, b, "/") : a / b
   }
 
   mod(a,b) { 

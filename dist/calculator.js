@@ -129,6 +129,7 @@
 
       this.definedOperators(options.operators || []);
       this.handleError = typeof options.handleError === 'function' ? options.handleError : null;
+      this.precision = options.precision === false ? false : true;
       this._caches = {};
     } //generate a regular expression
 
@@ -317,6 +318,35 @@
       } //handlers
 
     }, {
+      key: "_rectify",
+      value: function _rectify(a, b, o) {
+        var m, n, c;
+        a = a.toString();
+        b = b.toString();
+        m = (a.split(".")[1] || '').length;
+        n = (b.split(".")[1] || '').length;
+
+        switch (o) {
+          case "+":
+            c = Math.pow(10, Math.max(m, n));
+            return (a * c + b * c) / c;
+
+          case "-":
+            c = Math.pow(10, Math.max(m, n));
+            return (a * c - b * c) / c;
+
+          case "*":
+            a = a * Math.pow(10, m);
+            b = b * Math.pow(10, n);
+            return a * b / Math.pow(10, m + n);
+
+          case "/":
+            a = a * Math.pow(10, m);
+            b = b * Math.pow(10, n);
+            return a / b * Math.pow(10, n - m);
+        }
+      }
+    }, {
       key: "last",
       value: function last() {
         for (var _len = arguments.length, a = new Array(_len), _key = 0; _key < _len; _key++) {
@@ -333,17 +363,17 @@
     }, {
       key: "add",
       value: function add(a, b) {
-        return a + b;
+        return this.precision ? this._rectify(a, b, "+") : a + b;
       }
     }, {
       key: "sub",
       value: function sub(a, b) {
-        return a - b;
+        return this.precision ? this._rectify(a, b, "-") : a - b;
       }
     }, {
       key: "multi",
       value: function multi(a, b) {
-        return a * b;
+        return this.precision ? this._rectify(a, b, "*") : a * b;
       }
     }, {
       key: "div",
@@ -351,7 +381,7 @@
         return b === 0 ? {
           code: 1006,
           message: "The divisor cannot be zero"
-        } : a / b;
+        } : this.precision ? this._rectify(a, b, "/") : a / b;
       }
     }, {
       key: "mod",
