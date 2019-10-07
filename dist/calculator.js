@@ -343,7 +343,8 @@
           case "/":
             a = a * Math.pow(10, m);
             b = b * Math.pow(10, n);
-            return a / b * Math.pow(10, n - m);
+            console.log(a, b);
+            return this._rectify(a / b, Math.pow(10, n - m), "*");
         }
       }
     }, {

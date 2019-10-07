@@ -196,7 +196,7 @@ class Calculator {
       case "/":
         a = a * Math.pow(10, m)
         b = b * Math.pow(10, n)
-        return a / b * Math.pow(10, n - m)
+        return this._rectify(a / b, Math.pow(10, n - m), "*")
     }
     
   }
