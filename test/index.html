@@ -34,7 +34,8 @@
     {s: "test(4,5,6, 2)", r: -1},
     {s: "ca(min(2 + 3, 8),10)", r: Math.PI * 5 * 5},
     {s: "ta(3,4,5)", r: 6},
-    {s: "1/(5-5)", r: Infinity}
+    {s: "1/(5-5)", r: Infinity},
+    {s: "8.2/2", r: 4.1}
   ]
   calculator.definedOperators(
     {
@@ -73,7 +74,6 @@
 for (let i = 0, len = arrs.length; i < len; i++) {
   let item = arrs[i]
   let result = calculator.parse(item.s)
-  console.log(result)
   if(result.value === item.r) {
     console.log(`%c${item.s} = ${result.value} [success]`, "color: blue;")
   } else {

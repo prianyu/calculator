@@ -242,7 +242,7 @@ class Calculator {
   }
 
   rate(a) {
-    return this._rectify(a, 100, "/")
+    return a / 100;
   }
 
   sqrt(a,b) {

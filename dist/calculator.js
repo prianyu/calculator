@@ -419,7 +419,7 @@
     }, {
       key: "rate",
       value: function rate(a) {
-        return this._rectify(a, 100, "/");
+        return a / 100;
       }
     }, {
       key: "sqrt",
