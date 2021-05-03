@@ -1,4 +1,4 @@
-[English Doc](./README.md)
+﻿[English Doc](./README.md)
 
 # calculator
 一个数学表达式的解析工具。
@@ -56,6 +56,7 @@ var calculator = new Calculator();
   > **handleError[Function]:** 错误处理函数，详情请见[这里](https://github.com/prianyu/calculator/blob/master/README_CN.md#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86) 
   > **operators[Array<Object>|Object]:** 自定义的运算符，详情请见[这里](https://github.com/prianyu/calculator/blob/master/README_CN.md#API)
   > **precision[Boolean]:** 是否纠正浮点数四则运算的精度误差，默认为`true`
+  > **cache[Boolean]:** 是否开启计算缓存，默认为`true`，如果同一个表达式的计算结果按照不同的条件有不同的结果，你应该设置为`false`，比如弧度制和角度制的三角函数
 
 ```javascript
 var c1 = new Calculator({

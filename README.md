@@ -1,4 +1,4 @@
-[中文文档](./README_CN.md)
+﻿[中文文档](./README_CN.md)
 
 # calculator
 A mathematical expression parser for Javascript.
@@ -55,6 +55,7 @@ var calculator = new Calculator();
   > **handleError[Function]:** Error handler.For more details, please click here[click here](https://github.com/prianyu/calculator/blob/master/README_CN.md#Errors) 
   > **operators[Array<Object>|Object]:** Custom operators.For more details, please click here[click here](https://github.com/prianyu/calculator/blob/master/README_CN.md#API)
   > **precision[Boolean]:** Whether to deal with floating point number precision, default `true`
+  > **cache[Boolean]:** Whether to open the calculation cache,it is "true" by default. If the calculation results of the same expression have different results according to different conditions, you should set it to "false", such as trigonometric functions of radian and angle
 
 ```javascript
 var c1 = new Calculator({

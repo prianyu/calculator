@@ -130,6 +130,7 @@
       this.definedOperators(options.operators || []);
       this.handleError = typeof options.handleError === 'function' ? options.handleError : null;
       this.precision = options.precision === false ? false : true;
+      this.cache = options.cache !== false;
       this._caches = {};
     } //generate a regular expression
 
@@ -243,7 +244,7 @@
         s = s.replace(/\s/g, '');
         var cache = this._caches[s];
 
-        if (cache) {
+        if (this.cache && cache) {
           return cache;
         }
 
